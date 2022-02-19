@@ -17,7 +17,6 @@ We list all combinations mutually exclusive and collectively exhaustive.
 
 ### Files
 
-
 | t1             | t2             | t3             | t4             | local file to do | remote file to do | local del history to do | remote del history to do | equal to sync v2 branch |
 | -------------- | -------------- | -------------- | -------------- | ---------------- | ----------------- | ----------------------- | ------------------------ | ----------------------- |
 | mtime_local    | mtime_remote   | deltime_local  | deltime_remote | del              | del               | clean                   | skip                     |                         |
@@ -50,4 +49,4 @@ We list all combinations mutually exclusive and collectively exhaustive.
 We actually do not use any folders' metadata. Thus the only relevent info is their names, while the mtime is actually ignorable.
 
 1. Firstly generate all the files' plan. If any files exist, then it's parent folders all should exist. If the should-exist folder doesn't exist locally, the local should create it recursively. If the should-exist folder doesn't exist remotely, the remote should create it recursively.
-2. Secondly a folder is deletable, **if and only if**: all its sub-folders are deletable (a.k.a. marked being deleted before the mtime), **and** all sub-files are deletable (a.k.a. marked being deleted before the mtime). 
+2. Secondly a folder is deletable, **if and only if**: all its sub-folders are deletable (a.k.a. marked being deleted before the mtime), **and** all sub-files are deletable (a.k.a. marked being deleted before the mtime).
