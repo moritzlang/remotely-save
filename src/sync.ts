@@ -410,7 +410,7 @@ const assignOperationToFileInplace = (
       r.mtimeRemote >= deltimeLocal &&
       r.mtimeRemote >= deltime_remote
     ) {
-      r.decision == "downloadRemoteToLocal";
+      r.decision = "downloadRemoteToLocal";
       getFolderLevels(r.key, true).forEach((tmp) => mustBeKeptFolders.add(tmp));
       return r;
     }
@@ -426,7 +426,7 @@ const assignOperationToFileInplace = (
       r.deltimeLocal >= mtimeRemote &&
       r.deltimeLocal >= deltime_remote
     ) {
-      r.decision == "uploadLocalDelHistToRemote";
+      r.decision = "uploadLocalDelHistToRemote";
       if (r.existLocal || r.existRemote) {
         // actual deletion would happen
         getFolderLevels(r.key, true).forEach((tmp) =>
@@ -447,7 +447,7 @@ const assignOperationToFileInplace = (
       r.deltimeRemote >= mtimeRemote &&
       r.deltimeRemote >= deltimeLocal
     ) {
-      r.decision == "keepRemoteDelHist";
+      r.decision = "keepRemoteDelHist";
       if (r.existLocal || r.existRemote) {
         // actual deletion would happen
         getFolderLevels(r.key, true).forEach((tmp) =>
@@ -603,6 +603,7 @@ export const getSyncPlan = async (
     } else {
       // get all operations of files
       // and at the same time get some helper info for folders
+
       assignOperationToFileInplace(
         val,
         mustBeKeptFolders,
