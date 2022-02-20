@@ -61,7 +61,7 @@ interface OAuth2Info {
   revokeAuthSetting?: Setting;
 }
 
-type SyncTriggerSourceType = "manual" | "auto";
+type SyncTriggerSourceType = "manual" | "auto" | "dry";
 
 const iconNameSyncWait = `remotely-save-sync-wait`;
 const iconNameSyncRunning = `remotely-save-sync-running`;
@@ -89,7 +89,7 @@ export default class RemotelySavePlugin extends Plugin {
     const getNotice = (x: string) => {
       // only show notices in manual mode
       // no notice in auto mode
-      if (triggerSource === "manual") {
+      if (triggerSource === "manual" || triggerSource === "dry") {
         new Notice(x);
       }
     };
@@ -119,6 +119,12 @@ export default class RemotelySavePlugin extends Plugin {
         this.syncRibbon.setAttribute(
           "aria-label",
           `${this.manifest.name}: ${triggerSource} syncing`
+        );
+      }
+
+      if (triggerSource === "dry") {
+        getNotice(
+          "0/7 Remotely Save running in dry mode, not actual file changes would happen."
         );
       }
 
@@ -176,28 +182,35 @@ export default class RemotelySavePlugin extends Plugin {
         this.settings.password
       );
       log.info(syncPlan.mixedStates); // for debugging
-      await insertSyncPlanRecordByVault(
-        this.db,
-        syncPlan,
-        this.settings.vaultRandomID
-      );
+      if (triggerSource !== "dry") {
+        await insertSyncPlanRecordByVault(
+          this.db,
+          syncPlan,
+          this.settings.vaultRandomID
+        );
+      }
 
-      // The operations above are read only and kind of safe.
+      // The operations above are almost read only and kind of safe.
       // The operations below begins to write or delete (!!!) something.
 
-      getNotice("6/7 Remotely Save Sync data exchanging!");
+      if (triggerSource !== "dry") {
+        getNotice("6/7 Remotely Save Sync data exchanging!");
 
-      this.syncStatus = "syncing";
-      await doActualSync(
-        client,
-        this.db,
-        this.settings.vaultRandomID,
-        this.app.vault,
-        syncPlan,
-        this.settings.password,
-        (i: number, totalCount: number, pathName: string, decision: string) =>
-          self.setCurrSyncMsg(i, totalCount, pathName, decision)
-      );
+        this.syncStatus = "syncing";
+        await doActualSync(
+          client,
+          this.db,
+          this.settings.vaultRandomID,
+          this.app.vault,
+          syncPlan,
+          this.settings.password,
+          (i: number, totalCount: number, pathName: string, decision: string) =>
+            self.setCurrSyncMsg(i, totalCount, pathName, decision)
+        );
+      } else {
+        this.syncStatus = "syncing";
+        getNotice("6/7 Remotely Save real sync is skipped in dry run mode.");
+      }
 
       getNotice("7/7 Remotely Save finish!");
       this.currSyncMsg = "";
@@ -471,6 +484,15 @@ export default class RemotelySavePlugin extends Plugin {
       icon: iconNameSyncWait,
       callback: async () => {
         this.syncRun("manual");
+      },
+    });
+
+    this.addCommand({
+      id: "start-sync-dry-run",
+      name: "start sync (dry run only)",
+      icon: iconNameSyncWait,
+      callback: async () => {
+        this.syncRun("dry");
       },
     });
 
