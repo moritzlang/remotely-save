@@ -68,6 +68,20 @@ describe("Misc: get folder levels", () => {
     expect(misc.getFolderLevels(item3)).to.deep.equal(res3);
   });
 
+  it("should correctly add ending slash if required", () => {
+    const item = "xxx/yyy/zzz.md";
+    const res = ["xxx/", "xxx/yyy/"];
+    expect(misc.getFolderLevels(item, true)).to.deep.equal(res);
+
+    const item2 = "xxx/yyy/zzz";
+    const res2 = ["xxx/", "xxx/yyy/"];
+    expect(misc.getFolderLevels(item2, true)).to.deep.equal(res2);
+
+    const item3 = "xxx/yyy/zzz/";
+    const res3 = ["xxx/", "xxx/yyy/", "xxx/yyy/zzz/"];
+    expect(misc.getFolderLevels(item3, true)).to.deep.equal(res3);
+  });
+
   it("should treat path starting with / correctly", () => {
     const item = "/xxx/yyy/zzz.md";
     const res = ["/xxx", "/xxx/yyy"];
