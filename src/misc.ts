@@ -162,6 +162,24 @@ export const getPathFolder = (a: string) => {
 };
 
 /**
+ * If input is already a folder, returns its folder;
+ * And if input is a file, returns its direname.
+ * @param a
+ * @returns
+ */
+export const getParentFolder = (a: string) => {
+  const b = path.posix.dirname(a);
+  if (b === "." || b === "/") {
+    // the root
+    return "/";
+  }
+  if (b.endsWith("/")) {
+    return b;
+  }
+  return `${b}/`;
+};
+
+/**
  * https://stackoverflow.com/questions/54511144
  * @param a
  * @param delimiter

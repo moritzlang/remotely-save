@@ -105,6 +105,27 @@ describe("Misc: get folder levels", () => {
   });
 });
 
+describe("Misc: get parent folder", () => {
+  it("should treat empty path correctly", () => {
+    const item = "";
+    expect(misc.getParentFolder(item)).equals("/");
+  });
+
+  it("should treat one level path correctly", () => {
+    let item = "abc/";
+    expect(misc.getParentFolder(item)).equals("/");
+    item = "/efg/";
+    expect(misc.getParentFolder(item)).equals("/");
+  });
+
+  it("should treat more levels path correctly", () => {
+    let item = "abc/efg";
+    expect(misc.getParentFolder(item)).equals("abc/");
+    item = "/hij/klm/";
+    expect(misc.getParentFolder(item)).equals("/hij/");
+  });
+});
+
 describe("Misc: vaild file name tests", () => {
   it("should treat no ascii correctly", async () => {
     const x = misc.isVaildText("😄🍎 apple 苹果");
