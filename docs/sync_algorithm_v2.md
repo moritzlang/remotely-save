@@ -19,30 +19,30 @@ We list all combinations mutually exclusive and collectively exhaustive.
 
 | t1             | t2             | t3             | t4             | local file to do | remote file to do | local del history to do | remote del history to do | equal to sync v2 branch |
 | -------------- | -------------- | -------------- | -------------- | ---------------- | ----------------- | ----------------------- | ------------------------ | ----------------------- |
-| mtime_local    | mtime_remote   | deltime_local  | deltime_remote | del              | del               | clean                   | skip                     |                         |
-| mtime_local    | mtime_remote   | deltime_remote | deltime_local  | del              | del               | clean                   | skip                     |                         |
-| mtime_local    | deltime_local  | mtime_remote   | deltime_remote | del              | del               | clean                   | skip                     |                         |
-| mtime_local    | deltime_local  | deltime_remote | mtime_remote   | download_remote  | skip              | clean                   | clean                    |                         |
-| mtime_local    | deltime_remote | mtime_remote   | deltime_local  | del              | del               | clean                   | upload_local_del_history |                         |
-| mtime_local    | deltime_remote | deltime_local  | mtime_remote   | download_remote  | skip              | clean                   | clean                    |                         |
-| mtime_remote   | mtime_local    | deltime_local  | deltime_remote | del              | del               | clean                   | skip                     |                         |
-| mtime_remote   | mtime_local    | deltime_remote | deltime_local  | del              | del               | clean                   | upload_local_del_history |                         |
-| mtime_remote   | deltime_local  | mtime_local    | deltime_remote | del              | del               | clean                   | skip                     |                         |
-| mtime_remote   | deltime_local  | deltime_remote | mtime_local    | skip             | upload_local      | clean                   | clean                    |                         |
-| mtime_remote   | deltime_remote | mtime_local    | deltime_local  | del              | del               | clean                   | upload_local_del_history |                         |
+| mtime_remote   | mtime_local    | deltime_remote | deltime_local  | del_if_exists    | del_if_exists     | clean                   | upload_local_del_history |                         |
+| mtime_local    | mtime_remote   | deltime_remote | deltime_local  | del_if_exists    | del_if_exists     | clean                   | upload_local_del_history |                         |
+| mtime_remote   | deltime_remote | mtime_local    | deltime_local  | del_if_exists    | del_if_exists     | clean                   | upload_local_del_history |                         |
+| deltime_remote | mtime_remote   | mtime_local    | deltime_local  | del_if_exists    | del_if_exists     | clean                   | upload_local_del_history |                         |
+| mtime_local    | deltime_remote | mtime_remote   | deltime_local  | del_if_exists    | del_if_exists     | clean                   | upload_local_del_history |                         |
+| deltime_remote | mtime_local    | mtime_remote   | deltime_local  | del_if_exists    | del_if_exists     | clean                   | upload_local_del_history | 8                       |
+| mtime_remote   | mtime_local    | deltime_local  | deltime_remote | del_if_exists    | del_if_exists     | clean                   | keep                     |                         |
+| mtime_local    | mtime_remote   | deltime_local  | deltime_remote | del_if_exists    | del_if_exists     | clean                   | keep                     |                         |
+| mtime_remote   | deltime_local  | mtime_local    | deltime_remote | del_if_exists    | del_if_exists     | clean                   | keep                     |                         |
+| deltime_local  | mtime_remote   | mtime_local    | deltime_remote | del_if_exists    | del_if_exists     | clean                   | keep                     |                         |
+| mtime_local    | deltime_local  | mtime_remote   | deltime_remote | del_if_exists    | del_if_exists     | clean                   | keep                     |                         |
+| deltime_local  | mtime_local    | mtime_remote   | deltime_remote | del_if_exists    | del_if_exists     | clean                   | keep                     |                         |
 | mtime_remote   | deltime_remote | deltime_local  | mtime_local    | skip             | upload_local      | clean                   | clean                    |                         |
-| deltime_local  | mtime_local    | mtime_remote   | deltime_remote | del              | del               | clean                   | skip                     |                         |
-| deltime_local  | mtime_local    | deltime_remote | mtime_remote   | download_remote  | skip              | clean                   | clean                    |                         |
-| deltime_local  | mtime_remote   | mtime_local    | deltime_remote | del              | del               | clean                   | skip                     |                         |
-| deltime_local  | mtime_remote   | deltime_remote | mtime_local    | skip             | upload_local      | clean                   | clean                    |                         |
-| deltime_local  | deltime_remote | mtime_local    | mtime_remote   | download_remote  | skip              | clean                   | clean                    |                         |
-| deltime_local  | deltime_remote | mtime_remote   | mtime_local    | skip             | upload_local      | clean                   | clean                    |                         |
-| deltime_remote | mtime_local    | mtime_remote   | deltime_local  | skip             | del               | clean                   | upload_local_del_history | 8                       |
-| deltime_remote | mtime_local    | deltime_local  | mtime_remote   | download_remote  | skip              | clean                   | clean                    | 7;9                     |
-| deltime_remote | mtime_remote   | mtime_local    | deltime_local  | del              | del               | clean                   | upload_local_del_history |                         |
 | deltime_remote | mtime_remote   | deltime_local  | mtime_local    | skip             | upload_local      | clean                   | clean                    | 10                      |
-| deltime_remote | deltime_local  | mtime_local    | mtime_remote   | download_remote  | skip              | clean                   | clean                    | 1;9                     |
+| mtime_remote   | deltime_local  | deltime_remote | mtime_local    | skip             | upload_local      | clean                   | clean                    |                         |
+| deltime_local  | mtime_remote   | deltime_remote | mtime_local    | skip             | upload_local      | clean                   | clean                    |                         |
 | deltime_remote | deltime_local  | mtime_remote   | mtime_local    | skip             | upload_local      | clean                   | clean                    | 2;3;4;5;6               |
+| deltime_local  | deltime_remote | mtime_remote   | mtime_local    | skip             | upload_local      | clean                   | clean                    |                         |
+| mtime_local    | deltime_remote | deltime_local  | mtime_remote   | download_remote  | skip              | clean                   | clean                    |                         |
+| deltime_remote | mtime_local    | deltime_local  | mtime_remote   | download_remote  | skip              | clean                   | clean                    | 7;9                     |
+| mtime_local    | deltime_local  | deltime_remote | mtime_remote   | download_remote  | skip              | clean                   | clean                    |                         |
+| deltime_local  | mtime_local    | deltime_remote | mtime_remote   | download_remote  | skip              | clean                   | clean                    |                         |
+| deltime_remote | deltime_local  | mtime_local    | mtime_remote   | download_remote  | skip              | clean                   | clean                    | 1;9                     |
+| deltime_local  | deltime_remote | mtime_local    | mtime_remote   | download_remote  | skip              | clean                   | clean                    |                         |
 
 ### Folders
 
