@@ -39,6 +39,7 @@ import { doActualSync, getSyncPlan, isPasswordOk } from "./sync";
 import { messyConfigToNormal, normalConfigToMessy } from "./configPersist";
 
 import * as origLog from "loglevel";
+import { MetadataOnRemote } from "./metadataOnRemote";
 const log = origLog.getLogger("rs-default");
 
 const DEFAULT_SETTINGS: RemotelySavePluginSettings = {
@@ -148,6 +149,7 @@ export default class RemotelySavePlugin extends Plugin {
       );
       const remoteRsp = await client.listFromRemote();
       log.info(remoteRsp);
+      const metadataOnRemote: MetadataOnRemote = { deletions: [] as any[] };
 
       getNotice("3/7 Starting to fetch local meta data.");
       this.syncStatus = "getting_local_meta";
@@ -175,6 +177,7 @@ export default class RemotelySavePlugin extends Plugin {
       const syncPlan = await getSyncPlan(
         remoteRsp.Contents,
         local,
+        metadataOnRemote.deletions,
         localHistory,
         this.db,
         this.settings.vaultRandomID,
