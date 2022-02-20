@@ -49,4 +49,14 @@ We list all combinations mutually exclusive and collectively exhaustive.
 We actually do not use any folders' metadata. Thus the only relevent info is their names, while the mtime is actually ignorable.
 
 1. Firstly generate all the files' plan. If any files exist, then it's parent folders all should exist. If the should-exist folder doesn't exist locally, the local should create it recursively. If the should-exist folder doesn't exist remotely, the remote should create it recursively.
-2. Secondly a folder is deletable, **if and only if**: all its sub-folders are deletable (a.k.a. marked being deleted before the mtime), **and** all sub-files are deletable (a.k.a. marked being deleted before the mtime).
+2. Then, a folder is deletable, if and only if all the following conditions meet:
+
+   - it shows up in the remote deletion history
+   - all its sub-folders are deletable.
+   - it has at least one deleted-in-this-sync recursive sub-files.
+   - it doesn't have any sub-files after all files' deletions
+
+   Some examples:
+
+   - A user deletes the folder in device 1, then syncs from the device 1, then creates the same-name folder in device 2, then syncs from the device 2. The folder should be kept, instead of deleted, on device 2.
+   - A user deletes the folder in device 1, then syncs from the device 1, then do not touch the same-name folder in device 2, then syncs from the device 2. The folder should be deleted on device 2.
